@@ -1,84 +1,62 @@
 <template>
-  <div class="list row">
-    <div class="col-md-12">
-      <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Pesquisar produtos"
-          v-model="title"/>
-        <div class="input-group-append">
-          <button class="btn btn-outline-secondary m-1" type="button"
-            @click="searchTitle"
-          >
-            Pesquisar
-          </button>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <h4>Lista de produtos</h4>
-    <table class="table table-striped">
+<div class="container text-center">
+  <div class="row justify-content-start">
+     <div class="col-12">
+    <div class="col-4 d-flex">
+  <button type="button" class="btn btn-primary me-2">Pesquisar</button>
+  <input type="text" class="form-control" placeholder="Pesquisar" aria-label="Username" aria-describedby="basic-addon1">
+</div>
+
+      <h3>Contatos</h3>
+      <table class="table">
   <thead>
     <tr>
-      <th>Descrição</th>
-      <th>Estilo</th>
-      <th>Unidade</th>
+      <th scope="col">#</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+      <th scope="col">Handle</th>
     </tr>
   </thead>
   <tbody>
-    <tr 
-      v-for="(produto, index) in tutorials"
-      :key="index"
-      :class="{ active: index == currentIndex }"
-      @click="setActiveTutorial(produto, index)"
-    >
-      <td>{{ produto.descricao }}</td>
-      <td>{{ produto.estilo }}</td>
-      <td>{{ produto.unidade }}</td>
-    </tr>
+              <tr 
+              v-for="(contato, index) in tutorials"
+              :key="index"
+              :class="{ active: index == currentIndex }"
+            >
+              <td>{{ contato.id }}</td>
+              <td>{{ contato.descricao }}</td>
+              <td>{{ contato.estilo }}</td>
+              <td>{{ contato.unidade }}</td>
+            </tr>
+ 
   </tbody>
 </table>
-      <button class="m-3 btn btn-sm btn-danger" @click="removeAllTutorials">
-        Delete produto
-      </button>
-    </div>
-    <div class="col-md-6">
-      <div v-if="currentTutorial">
-        <h4>Detatlhes do produto</h4>
-        <div>
-          <label><strong>Descrição:</strong></label> {{ currentTutorial.descricao }}
-        </div>
-        <div>
-          <label><strong>Estilo:</strong></label> {{ currentTutorial.estilo }}
-        </div>
-        <div>
-          <label><strong>Unidade:</strong></label> {{ currentTutorial.unidade }}
-        </div>
-
-        <router-link :to="'/tutorials/' + currentTutorial.id" class="badge badge-warning">Edit</router-link>
-      </div>
-      <div v-else>
-        <br />
-        <p>Selecione um produto...</p>
-      </div>
     </div>
   </div>
+   </div>
 </template>
 
 <script>
-import TutorialDataService from "../services/TutorialDataService";
+import objService from "../services/TutorialDataService";
 
 export default {
   name: "tutorials-list",
   data() {
     return {
       tutorials: [],
-      currentTutorial: null,
+      currentTutorial: {
+        descricao: '',
+        estilo: '',
+        unidade: ''
+      },
       currentIndex: -1,
-      title: ""
+      submitted: false,
+      responseMessage: ''
     };
   },
   methods: {
-    retrieveTutorials() {
-      TutorialDataService.getAll()
+    Listar() {
+      objService.getAll()
         .then(response => {
           this.tutorials = response.data;
           console.log(response.data);
@@ -89,29 +67,17 @@ export default {
     },
 
     refreshList() {
-      this.retrieveTutorials();
-      this.currentTutorial = null;
+      this.Listar();
+      this.currentTutorial = {
+        descricao: '',
+        estilo: '',
+        unidade: ''
+      };
       this.currentIndex = -1;
     },
-
-    setActiveTutorial(tutorial, index) {
-      this.currentTutorial = tutorial;
-      this.currentIndex = index;
-    },
-
-    removeAllTutorials() {
-      TutorialDataService.deleteAll()
-        .then(response => {
-          console.log(response.data);
-          this.refreshList();
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    },
     
-    searchTitle() {
-      TutorialDataService.findByTitle(this.title)
+    PesquisarContato() {
+      objService.findByTitle(this.title)
         .then(response => {
           this.tutorials = response.data;
           console.log(response.data);
@@ -122,15 +88,7 @@ export default {
     }
   },
   mounted() {
-    this.retrieveTutorials();
-  }
+    this.Listar();
+  },
 };
 </script>
-
-<style>
-.list {
-  text-align: left;
-  max-width: 1200px;
-  margin: auto;
-}
-</style>

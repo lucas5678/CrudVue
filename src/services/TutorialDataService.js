@@ -10,15 +10,16 @@ class TutorialDataService {
   }
 
   create(data) {
-    return http.post("/tutorials", data);
+    return http.post("http://apibruno.ddns.net:8090/sistema/cadastro-produto", data);
   }
 
-  update(id, data) {
-    return http.put(`/tutorials/${id}`, data);
+  update(data) {
+    return http.post("http://apibruno.ddns.net:8090/sistema/update-produto", data);
   }
 
-  delete(id) {
-    return http.delete(`/tutorials/${id}`);
+  delete(data) {
+    return http.post("http://apibruno.ddns.net:8090/sistema/delete-produto", data);
+    //return http.delete(`/tutorials/${id}`);
   }
 
   deleteAll() {

@@ -7,7 +7,7 @@
           <router-link to="/listar-produtos" class="nav-link" style="color: white">Home</router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/add" class="nav-link">Adicionar</router-link>
+          <router-link to="/adicionar-contato" class="nav-link">Adicionar Contato</router-link>
         </li>
       </div>
     </nav>

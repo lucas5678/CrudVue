@@ -21,6 +21,11 @@ export default new Router({
       path: "/add",
       name: "add",
       component: () => import("./components/AddTutorial")
+    },
+    {
+      path: "/adicionar-contato",
+      name: "Adcionar",
+      component: () => import("./components/AdicionarContato")
     }
   ]
 });
